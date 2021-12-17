@@ -34,8 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
     Route::get('ben', function () {
-        return BenificiaryResource::collection(Benificiary::all());
+        return Benificiary::all();
     });
+    
     Route::get('/sync/settings',[Sync::class,'settings']);
     Route::post('/sync/create',[Sync::class,'addCreated']);
     Route::post('/sync/update',[Sync::class,'updateUpdated']);
