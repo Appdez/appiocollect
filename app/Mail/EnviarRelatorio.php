@@ -33,7 +33,7 @@ class EnviarRelatorio extends Mailable
      */
     public function build()
     {
-        $email =  $this->subject('Relatório mensal de base de dados BIOSP.')
+        $email =  $this->subject('Planilha de dados colectados')
         ->view('backend.relatorios');
         foreach ($this->paths as $path) {
             $email->attachFromStorage($path);

@@ -18,13 +18,8 @@ class SendMailController extends Controller
      */
     public function index()
     {
-        $emails = SendMail::all()->map(function($mail){
-            $mail->bairros = $mail->neighborhoods;
-           // dd($mail);
-            return $mail;
-        });
-       // dd($emails);
-        return view('backend.sendMail.sendMail')->with('sendMails', $emails)->with('bairros',Neighborhood::all());
+        $emails = SendMail::all();
+        return view('backend.sendMail.sendMail')->with('sendMails', $emails);
     }
 
 
@@ -37,20 +32,13 @@ class SendMailController extends Controller
      */
     public function store(Request $request)
     {
-       // dd($request->all());
         $request->validate([
-            'email' => 'required|email|unique:send_mails',
-            'neiborhoods' => 'required|array'
+            'email' => 'required|email|unique:send_mails'
         ]);
 
         try {
             $email = SendMail::create(['email'=>$request->email]);
-            foreach ($request->neiborhoods as $neiborhood) {
-                SendMailNeighborhood::create([
-                    'send_mail_uuid' => $email->uuid,
-                    'neighborhood_uuid' => $neiborhood
-                ]);
-            }
+
             session()->flash('success', 'Email criado com sucesso.');
             return redirect()->route('sendMail.index');
         } catch (\Throwable $e) {
@@ -84,26 +72,11 @@ class SendMailController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'neiborhoods' => 'required|array'
         ]);
         try {
              $sendMail->update([
                 'email' => $request->email
              ]);
-
-            $mails =  SendMailNeighborhood::where('send_mail_uuid',$sendMail->uuid)->get();
-
-            foreach ($mails as  $mail) {
-                $mail->delete();
-            }
-
-            foreach ($request->neiborhoods as $neiborhood) {
-                SendMailNeighborhood::create([
-                    'send_mail_uuid' => $sendMail->uuid,
-                    'neighborhood_uuid' => $neiborhood
-                ]);
-            }
-
             session()->flash('success', 'Email actualizado com sucesso.');
             return redirect()->route('sendMail.index');
         } catch (\Throwable $e) {
@@ -124,11 +97,6 @@ class SendMailController extends Controller
 
         if ($sendMail) {
             try {
-                $mails =  SendMailNeighborhood::where('send_mail_uuid',$sendMail->uuid)->get();
-
-                foreach ($mails as  $mail) {
-                    $mail->delete();
-                }
                 $sendMail->delete();
                 session()->flash('success', 'Email deletado com sucesso.');
                 return redirect()->route('sendMail.index');

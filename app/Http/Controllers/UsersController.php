@@ -20,7 +20,7 @@ class UsersController extends Controller
     {
             $users = User::all();
 
-            return view('backend.user.user')->with(['users' => $users,'bairros'=>Neighborhood::all()]);
+            return view('backend.user.user')->with(['users' => $users]);
 
     }
 
@@ -109,7 +109,7 @@ class UsersController extends Controller
     public function destroy(User $user)
     {
 
-        if ($user && $user->lastSync->count() == 0 ) {
+        if ($user) {
             try {
                 $user->delete();
                 session()->flash('success', 'Usuário deletado com sucesso.');

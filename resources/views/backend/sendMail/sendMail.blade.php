@@ -57,7 +57,6 @@
                                     </th>
                                     <th>Uuid</th>
                                     <th>Email</th>
-                                    <th>Bairros</th>
                                     <th>Editar</th>
                                     <th>Delatar</th>
                                 </tr>
@@ -68,16 +67,7 @@
                                         <td><i class="fas fa-th"></i></td>
                                         <td>{{ ucfirst($sendMail->uuid) }}</td>
                                         <td>{{ ucfirst($sendMail->email) }}</td>
-                                        @if ($sendMail->bairros!= null)
-                                            <td>
-                                                @foreach ($sendMail->bairros as $neighborhood)
-                                                    <span class="badge badge-pill badge-primary">
-                                                        {{ ucfirst($neighborhood->name) }}
-                                                    </span>
-                                                @endforeach
 
-                                            </td>
-                                        @endif
 
                                         <td><button class="btn btn-secondary" data-toggle="modal" data-target="#EditSendMail"
                                                 data-code="{{ ucfirst($sendMail) }}"><i class="fa fa-edit"></i></button>
@@ -117,14 +107,6 @@
                                 <input id="email" type = "email" class="form-control" name="email"
                                     placeholder="Digite o email" required autocomplete="email" autofocus>
                             </div>
-                            <div class="col-md-12 py-3">
-                                <label for="bairros">Bairro</label>
-                                <select name="neiborhoods[]" id="create_bairro" class="selectric" multiple>
-                                    @foreach ($bairros as $bairro)
-                                        <option value="{{$bairro->uuid}}">{{$bairro->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
@@ -157,14 +139,6 @@
                             <div class="py-2 col-md-12">
                                 <input id="email_edit" type = "email" class="form-control" name="email"
                                     placeholder="Digite o email" required autocomplete="email" autofocus>
-                            </div>
-                            <div class="col-md-12 py-2">
-                            <label for="bairros">Bairro</label>
-                            <select name="neiborhoods[]" id="update_bairro" class="selectric" multiple>
-                                @foreach ($bairros as $bairro)
-                                    <option value="{{$bairro->uuid}}">{{$bairro->name}}</option>
-                                @endforeach
-                            </select>
                             </div>
                         </div>
                     </div>
@@ -239,12 +213,7 @@
                 form.attr('action', '{!! route('sendMail.index') !!}' + '/' + code.uuid);
                 modal.find('#id_edit').val(code.uuid);
                 modal.find('#email_edit').val(code.email);
-                $("#update_bairro option").attr("selected", false);
-                for (let index = 0; index < code.bairros.length; index++) {
-                    $('#update_bairro option[value="'+ code.bairros[index].uuid +'"]').attr("selected", "selected");
-                }
 
-                $('#update_bairro').selectric('refresh');
             });
         });
         $(function() {

@@ -4,7 +4,7 @@
             <a href="{{ url('/') }}">{{ config('app.name', 'Dashboard') }}</a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ url('/') }}">BIOSP</a>
+            <a href="{{ url('/') }}">APP10</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Painel Administrativo</li>
@@ -20,24 +20,23 @@
         @role('admin')
             <ul class="sidebar-menu">
                 <li class="
-                    @if (Route::is('province.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('province.index') }}"><i class="fas fa-city"></i>
-                    <span>Províncias</span></a>
+                    @if (Route::is('district.*')) active @endif ">
+                    <a class=" nav-link" href="{{ route('district.index') }}"><i class="fas fa-city"></i>
+                    <span>Distritos</span></a>
                 </li>
             </ul>
             <ul class="sidebar-menu">
                 <li class="
-                    @if (Route::is('document_type.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('document_type.index') }}"><i class="fas fa-id-card "></i>
-                    <span>Documentos necessários</span></a>
+                    @if (Route::is('benefit.*')) active @endif ">
+                    <a class=" nav-link" href="{{ route('benefit.index') }}"><i class="fas fa-shopping-basket"></i>
+                    <span>Beneficio recibido</span></a>
                 </li>
             </ul>
-
             <ul class="sidebar-menu">
                 <li class="
-                    @if (Route::is('bairro.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('bairro.index') }}"><i class="fas fa-map-marker-alt"></i>
-                    <span>Bairros</span></a>
+                    @if (Route::is('project_area.*')) active @endif ">
+                    <a class=" nav-link" href="{{ route('project_area.index') }}"><i class="fas fa-chart-area"></i>
+                    <span>Area do projecto</span></a>
                 </li>
             </ul>
             <ul class="sidebar-menu">
@@ -45,34 +44,6 @@
                     @if (Route::is('genre.*')) active @endif ">
                     <a class=" nav-link" href="{{ route('genre.index') }}"><i class="fas fa-transgender "></i>
                     <span>Gêneros</span></a>
-                </li>
-            </ul>
-            <ul class="sidebar-menu">
-                <li class="
-                    @if (Route::is('provenace.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('provenace.index') }}"><i class="fas fa-road "></i>
-                    <span>Proviniências</span></a>
-                </li>
-            </ul>
-            <ul class="sidebar-menu">
-                <li class="
-                    @if (Route::is('forwarded_service.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('forwarded_service.index') }}"><i class="fas fa-forward "></i>
-                    <span>Serviços encaminhados</span></a>
-                </li>
-            </ul>
-            <ul class="sidebar-menu">
-                <li class="
-                    @if (Route::is('purpose_of_visit.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('purpose_of_visit.index') }}"><i class="fas fa-warehouse "></i>
-                    <span>Objectivo das visitas</span></a>
-                </li>
-            </ul>
-            <ul class="sidebar-menu">
-                <li class="
-                    @if (Route::is('reason_opening_case.*')) active @endif ">
-                    <a class=" nav-link" href="{{ route('reason_opening_case.index') }}"><i class="fas fa-file-contract "></i>
-                    <span>Abertura de processo</span></a>
                 </li>
             </ul>
 

@@ -22,14 +22,7 @@
             <div class="alert-body">
                 <button class="close" data-dismiss="alert"><span>×</span></button>
                 @error('name')
-                    <strong>{{ $message }}</strong><br>
-                @enderror
-
-                @error('password')
-                    <strong>{{ $message }}</strong><br>
-                @enderror
-                @error('email')
-                    <strong>{{ $message }}</strong><br>
+                    <strong>{{ $message }}</strong>
                 @enderror
             </div>
         </div>
@@ -43,15 +36,15 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>Tabela de usuários</h4>
+                    <h4>Tabela de area do projectos</h4>
                     <div class="card-header-action">
-                        <button class="btn btn-info" data-toggle="modal" data-target="#novoUser"><i
-                                class="fas fa-plus"></i><span> Novo usuário</span></button>
+                        <button class="btn btn-info" data-toggle="modal" data-target="#novoProvincia"><i
+                                class="fas fa-plus"></i><span> Novo area do projecto</span></button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped v_center" id="users">
+                        <table class="table table-striped v_center" id="area_do_projectos">
                             <thead>
                                 <tr>
                                     <th class="text-center">
@@ -61,21 +54,19 @@
                                     <th>Nome</th>
                                     <th>Editar</th>
                                     <th>Delatar</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
+                                @foreach ($project_areas as $project_area)
                                     <tr>
                                         <td><i class="fas fa-th"></i></td>
-                                        <td>{{ ucfirst($user->uuid) }}</td>
-                                        <td>{{ ucfirst($user->name) }}</td>
-
-                                        <td><button class="btn btn-secondary" data-toggle="modal" data-target="#EditUser"
-                                                data-code="{{ ucfirst($user) }}"><i class="fa fa-edit"></i></button>
+                                        <td>{{ ucfirst($project_area->uuid) }}</td>
+                                        <td>{{ ucfirst($project_area->name) }}</td>
+                                        <td><button class="btn btn-secondary" data-toggle="modal" data-target="#EditProvincia"
+                                                data-code="{{ ucfirst($project_area) }}"><i class="fa fa-edit"></i></button>
                                         </td>
                                         <td><a href="#" class="btn btn-danger" data-toggle="modal"
-                                                data-target="#DeleteUser" data-code="{{ ucfirst($user) }}"><i
+                                                data-target="#DeleteProjectArea" data-code="{{ ucfirst($project_area) }}"><i
                                                     class="fa fa-trash"></i></a></td>
                                     </tr>
                                 @endforeach
@@ -91,36 +82,24 @@
 @endsection
 
 @section('modals')
-    <div class="modal fade" tabindex="-1" role="dialog" id="novoUser">
+    <div class="modal fade" tabindex="-1" role="dialog" id="novoProvincia">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Novo usuário</h5>
+                    <h5 class="modal-title">Novo area do projecto</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('user.store') }}" method="post">
+                <form action="{{ route('project_area.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="container form-group row">
-                          <div class="col-md-12">
-                                <input id="name" type="text" class="form-control" name="name"
-                                    placeholder="Digite nome do usuário" required autocomplete="name" autofocus value="{{ old('name') }}">
-                            </div>
-                            <div class="py-2 col-md-12">
-                                <input id="email" type="email" class="form-control" name="email"
-                                    placeholder="Digite o email do usuário" required autocomplete="email" autofocus value="{{ old('email') }}">
-                            </div>
-                            <div class="py-2 col-md-12">
-                                <input id="password" type="password" class="form-control" name="password"
-                                    placeholder="Digite o password do usuário" required autocomplete="new-password" autofocus>
-                            </div>
-                            <div class="py-2 col-md-12">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
-                                    placeholder="Confirme o password do usuário" required autocomplete="new-password" autofocus>
-                            </div>
 
+                            <div class="col-md-12">
+                                <input id="name" type="text" class="form-control" name="name"
+                                    placeholder="Digite nome do area do projecto" required autocomplete="name" autofocus>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
@@ -132,42 +111,28 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="EditUser">
+    <div class="modal fade" tabindex="-1" role="dialog" id="EditProvincia">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Editar usuário</h5>
+                    <h5 class="modal-title">Editar area do projecto</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('user.index') }}" method="post" id="edit_form">
+                <form action="{{ route('project_area.index') }}" method="post" id="edit_form">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body">
                         <div class="container form-group row">
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <input id="id_edit" type="text" class="form-control" name="id" placeholder="Digite Id"
                                     required autocomplete="id" autofocus disabled>
                             </div>
                             <div class="py-2 col-md-12">
                                 <input id="name_edit" type="text" class="form-control" name="name"
-                                    placeholder="Digite nome do usuário" required autocomplete="name" autofocus>
+                                    placeholder="Digite nome do area do projecto" required autocomplete="name" autofocus>
                             </div>
-                            <div class="py-2 col-md-12">
-                                <input id="email_edit" type="email" class="form-control" name="email"
-                                    placeholder="Digite o email do usuário" required autocomplete="email" autofocus value="{{ old('email') }}">
-                            </div>
-                            <div class="py-2 col-md-12">
-                                <input id="password_edit" type="password" class="form-control" name="password"
-                                    placeholder="Digite o password do usuário"  autocomplete="new-password" autofocus>
-                            </div>
-                            <div class="py-2 col-md-12">
-                                <input id="password-confirm_edit" type="password" class="form-control" name="password_confirmation"
-                                    placeholder="Confirme o password do usuário"  autocomplete="new-password" autofocus>
-                            </div>
-
-
                         </div>
                     </div>
                     <div class="modal-footer bg-whitesmoke br">
@@ -178,16 +143,16 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" tabindex="-1" role="dialog" id="DeleteUser">
+    <div class="modal fade" tabindex="-1" role="dialog" id="DeleteProjectArea">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">Deletar usuário</h6>
+                    <h6 class="modal-title">Deletar area do projecto</h6>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('user.index') }}" method="post" id="delete_form">
+                <form action="{{ route('project_area.index') }}" method="post" id="delete_form">
                     @csrf
                     @method('DELETE')
                     <div class="modal-footer bg-whitesmoke br">
@@ -203,12 +168,10 @@
     <link rel="stylesheet" href="{{ asset('backend/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/jquery-selectric/selectric.css') }}">
 @endpush
 @push('cssLibs')
     <link rel="stylesheet" href="{{ asset('backend/prism/prism.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/cropper/cropper.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/select2/dist/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/jquery-selectric/selectric.css') }}">
 @endpush
 @push('jsLibs')
     <script src="{{ asset('backend/datatables/datatables.min.js') }}"></script>
@@ -216,19 +179,16 @@
     <script src="{{ asset('backend/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
     <script src="{{ asset('backend/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('backend/prism/prism.js') }}"></script>
-    <script src="{{ asset('backend/cropper/cropper.js') }}"></script>
-    <script src="{{ asset('backend/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('backend/jquery-selectric/jquery.selectric.min.js') }}"></script>
-
 @endpush
 @push('js')
     <script>
-        $("#users").dataTable({
+        $("#area_do_projectos").dataTable({
             "lengthChange": false,
             "pageLength": 5,
             "info": false,
             "language": {
-                'sSearch': 'Pesquisar usuários',
+                'sSearch': 'Pesquisar area do projectos',
                 "oPaginate": {
                     "sFirst": "Primero",
                     "sLast": "Último",
@@ -238,28 +198,31 @@
             }
         });
         $(function() {
-            $('#EditUser').on('show.bs.modal', function(event) {
+            $('#EditProvincia').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 var code = button.data('code');
                 var modal = $(this);
                 var form = modal.find('#edit_form');
-                form.attr('action', '{!! route('user.index') !!}' + '/' + code.uuid);
+                form.attr('action', '{!! route('project_area.index') !!}' + '/' + code.uuid);
                 modal.find('#id_edit').val(code.uuid);
-                modal.find('#name_edit').val(code.name);
-                modal.find('#email_edit').val(code.email);
+                modal.find('#name_edit').val(code.name)
             });
         });
         $(function() {
-            $('#DeleteUser').on('show.bs.modal', function(event) {
+            $('#DeleteProjectArea').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 var code = button.data('code');
                 var modal = $(this);
                 var form = modal.find('#delete_form');
-                form.attr('action', '{!! route('user.index') !!}' + '/' + code.uuid);
+                form.attr('action', '{!! route('project_area.index') !!}' + '/' + code.uuid);
+
             });
         });
-        $(function(){
-          // $('select').selectric();
+
+        $(function() {
+             $('selectric').selectric({
+                ignore: []
+             });
         });
     </script>
 @endpush
