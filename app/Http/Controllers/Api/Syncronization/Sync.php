@@ -3,25 +3,18 @@
 namespace App\Http\Controllers\Api\Syncronization;
 
 use App\Http\Controllers\Controller;
-use App\Models\DocumentType;
-use App\Models\ForwardedService;
-use App\Models\Genre;
-use App\Models\Neighborhood;
-use App\Models\Provenace;
-use App\Models\PurposeOfVisit;
-use App\Models\ReasonOpeningCase;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Api\BenificiaryController as Server;
+use App\Models\Benefit;
 use App\Models\Benificiary;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Models\District;
+use App\Models\Genre;
+use App\Models\ProjectArea;
+use Illuminate\Http\Request;
 class Sync extends Controller
 {
 
     public function ben()
     {
-        $beneficiaries =  collect(Benificiary::where('neighborhood_uuid', Auth::user()->neighborhood_uuid)->get());
+        $beneficiaries =  Benificiary::all();
         $benificiaries = $beneficiaries->map(function($ben,$key){
              $ben->created_at = $ben->created_at->format('Y-m-d H:i:s.u');
              $ben->updated_at = $ben->updated_at->format('Y-m-d H:i:s.u');
@@ -35,9 +28,6 @@ class Sync extends Controller
         $errorOnCreating = Array();
         $created = $request->all();
 
-
-        //return $created; //dd(Storage::put('json.json', $created));
-        //$created = collect($created)->sortBy('created_at');
         foreach ($created as $ben) {
             try {
                  Benificiary::create($ben);
@@ -85,14 +75,10 @@ class Sync extends Controller
     public function settings()
     {
         return [
-            'document_types' => DocumentType::all(),
-            'forwarded_services' => ForwardedService::all(),
+            'benefits' => Benefit::all(),
+            'districts' => District::all(),
             'genres' => Genre::all(),
-            'neighborhoods' => Neighborhood::where('uuid', auth()->user()->neighborhood_uuid)
-                ->get(),
-            'provenances' => Provenace::all(),
-            'propuses_of_visits' => PurposeOfVisit::all(),
-            'reason_of_opening_cases' => ReasonOpeningCase::all(),
+            'project_areas' => ProjectArea::all(),
             'benificiaries' => $this->ben()
         ];
     }

@@ -4,30 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BenificiaryResource;
 use App\Models\Benificiary;
-use App\Models\ForwardedService;
-use App\Models\Genre;
-use App\Models\Neighborhood;
-use App\Models\Provenace;
-use App\Models\PurposeOfVisit;
-use App\Models\ReasonOpeningCase;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Imports\Biosp as BiospImport;
 use App\Exports\Biosp as BiospExport;
-use App\Models\Benefit;
-use App\Traits\SumProduct;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DashbordController extends Controller
 {
-    use SumProduct;
-
-    private $startDate;
-    private $endDate;
-    private $visits;
-    private $queries;
-    private $auxQueries;
-    private $visitsPlus5;
 
 
     /**
@@ -44,9 +27,9 @@ class DashbordController extends Controller
 
     public function importCollection($dataCollection, $bairro, $toSave = false)
     {
-        $collection = Excel::toCollection(new BiospImport, storage_path('SA.xlsx'));
+        $collection = Excel::toCollection(new BiospImport, storage_path('BD.xlsx'));
         $data = $dataCollection;
-        $collection[0][0][0] .= '-' . $bairro;
+        $collection[0][0][0] .= '' . $bairro;
 
         /**
          * @author @inkomomutane
@@ -56,9 +39,6 @@ class DashbordController extends Controller
         for ($i = 0; $i < $data->count(); $i++) {
             $collection[0][3 + $i] = collect($data[$i])->values();
         }
-
-        $collection[1]= $this->relatorio($dataCollection,$bairro);
-
         if ($toSave) {
             $path = 'rl/' . "Base de dados" . date_format(now(), "d-M-Y") . '.xlsx';
             try {
@@ -70,7 +50,7 @@ class DashbordController extends Controller
 
             return $path;
         } else
-            return Excel::download(new BiospExport($collection),    "Base de dados" . date_format(now(), "d-M-Y") . '.xlsx');
+            return Excel::download(new BiospExport($collection),    "Base de dados" . date_format(now(), "d-M-Y-H-m-s") . '.xlsx');
     }
 
 
@@ -84,7 +64,7 @@ class DashbordController extends Controller
             if (
                 auth()->user()->hasRole('admin')
             ) {
-                return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()), 'Todos');
+                return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()), '');
             }
         } else {
             return abort(403);

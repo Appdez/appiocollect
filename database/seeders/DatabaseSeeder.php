@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Benefit;
+use App\Models\Benificiary;
+use App\Models\District;
+use App\Models\Genre;
+use App\Models\ProjectArea;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +21,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $aosp =  Role::create([
+        /*$aosp =  Role::create([
         'name' => 'aosp',
         ]);
 
@@ -33,7 +38,13 @@ class DatabaseSeeder extends Seeder
          ]);
 
          $roles = Role::where('name', 'admin')->get();
-         $user->syncRoles($roles);
+         $user->syncRoles($roles);*/
+         User::factory(5)->create();
+         Benefit::factory(5)->create();
+         District::factory(5)->create();
+         Genre::factory(5)->create();
+         ProjectArea::factory(5)->create();
+         Benificiary::factory(450)->create();
         //app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

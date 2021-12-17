@@ -41,7 +41,6 @@ class UserController extends Controller
                 'email' => ['Email ou senha incorretas.'],
             ]);
         }
-        $user->tokens()->delete();
         return ['token'=>$user->createToken($user->uuid)->plainTextToken];
     }
 }

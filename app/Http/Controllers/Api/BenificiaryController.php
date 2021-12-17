@@ -101,10 +101,11 @@ class BenificiaryController extends Controller
            }
         }
     }
-    private function lastSync()
-    {
+   /* private function lastSync()
+   * {
         $user = User::where('uuid',auth()->user()->uuid)->first();
         return  $user->lastSync()->orderBy('last_sync_at','asc')->first()->last_sync_at;
     }
+    */
 
 }
