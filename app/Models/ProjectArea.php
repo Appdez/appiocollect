@@ -6,12 +6,12 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class ProjectArea
@@ -28,7 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class ProjectArea extends Model
 {
-    use Uuids,HasFactory;
+
+    use Uuids,HasFactory,SoftDeletes;
 	protected $table = 'project_areas';
 	protected $primaryKey = 'uuid';
 	public $incrementing = false;
@@ -39,6 +40,6 @@ class ProjectArea extends Model
 
 	public function benificiaries()
 	{
-		return $this->hasMany(Benificiary::class, 'project_area_uuid');
+		return $this->belongsToMany(Benificiary::class, 'benificiary_project_area', 'project_area_uuid', 'benificiary_uuid');
 	}
 }

@@ -24,8 +24,6 @@ class CreateBenificiariesTable extends Migration
             $table->timestamps(6);
             $table->softDeletes('deleted_at', 6);
             $table->string('district_uuid')->index('fk_benificiaries_districts1_idx');
-            $table->string('benefit_uuid')->index('fk_benificiaries_benefits1_idx');
-            $table->string('project_area_uuid')->index('fk_benificiaries_project_areas1_idx');
             $table->string('genre_uuid')->index('fk_benificiaries_genres1_idx');
         });
     }

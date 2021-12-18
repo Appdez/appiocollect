@@ -29,10 +29,8 @@ class BenificiaryFactory extends Factory
             'form_number' => $this->faker->randomNumber(),
             'zone' => $this->faker->word,
             'location' => $this->faker->word,
-            'district_uuid' => \App\Models\District::all()->random(2)->first(),
-            'benefit_uuid' => \App\Models\Benefit::all()->random(2)->first(),
-            'project_area_uuid' => \App\Models\ProjectArea::all()->random(2)->first(),
-            'genre_uuid' => \App\Models\Genre::all()->random(2)->first(),
+            'district_uuid' => \App\Models\District::all()->random(1)->first(),
+            'genre_uuid' => \App\Models\Genre::all()->random(1)->first(),
         ];
     }
 }

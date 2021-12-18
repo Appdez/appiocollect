@@ -3,16 +3,16 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Genre;
+use App\Models\SendMail;
 
-class GenreFactory extends Factory
+class SendMailFactory extends Factory
 {
     /**
     * The name of the factory's corresponding model.
     *
     * @var  string
     */
-    protected $model = Genre::class;
+    protected $model = SendMail::class;
 
     /**
     * Define the model's default state.
@@ -23,7 +23,7 @@ class GenreFactory extends Factory
     {
         return [
             'uuid' => $this->faker->uuid,
-            'name' => $this->faker->name,
+            'email' => $this->faker->safeEmail,
         ];
     }
 }

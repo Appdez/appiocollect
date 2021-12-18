@@ -6,13 +6,13 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
 use Carbon\Carbon;
+use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  * Class User
@@ -25,9 +25,6 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property string|null $neighborhood_uuid
- *
- * @property Neighborhood|null $neighborhood
  *
  * @package App\Models
  */
@@ -52,6 +49,6 @@ class User extends Authenticatable
 		'email',
 		'email_verified_at',
 		'password',
-		'remember_token',
+		'remember_token'
 	];
 }

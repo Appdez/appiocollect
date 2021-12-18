@@ -14,7 +14,10 @@ class Sync extends Controller
 
     public function ben()
     {
-        $beneficiaries =  Benificiary::all();
+        $beneficiaries = Benificiary::with(
+            'project_areas'
+        )->with(
+            'benefits')->get();
         $benificiaries = $beneficiaries->map(function($ben,$key){
              $ben->created_at = $ben->created_at->format('Y-m-d H:i:s.u');
              $ben->updated_at = $ben->updated_at->format('Y-m-d H:i:s.u');

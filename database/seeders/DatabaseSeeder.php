@@ -101,13 +101,27 @@ class DatabaseSeeder extends Seeder
 
 
 
-         /*
+/*
          User::factory(5)->create();
          Benefit::factory(5)->create();
          District::factory(5)->create();
          Genre::factory(5)->create();
          ProjectArea::factory(5)->create();
          Benificiary::factory(450)->create();*/
+         Benificiary::factory(50)->create();
+
+         Benificiary::all()->map(function(Benificiary $benificary){
+             $benificary->project_areas()->sync(ProjectArea::all()->random(
+                 collect([1,2,3,4,5])->random(1)->first()
+             ));
+             return $benificary;
+         });
+         Benificiary::all()->map(function(Benificiary $benificary){
+             $benificary->benefits()->sync(Benefit::all()->random(
+                 collect([1,2,3,4,5,6,7,8])->random(1)->first()
+             ));
+             return $benificary;
+         });
         //app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }

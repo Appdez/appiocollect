@@ -8,6 +8,7 @@ namespace App\Models;
 
 use App\Traits\Uuids;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,24 +28,21 @@ use Illuminate\Support\Facades\DB;
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property string $district_uuid
- * @property string $benefit_uuid
- * @property string $project_area_uuid
  * @property string $genre_uuid
  *
- * @property Benefit $benefit
  * @property District $district
  * @property Genre $genre
- * @property ProjectArea $project_area
+ * @property Collection|Benefit[] $benefits
+ * @property Collection|ProjectArea[] $project_areas
  *
  * @package App\Models
  */
 class Benificiary extends Model
 {
     use Uuids,HasFactory,SoftDeletes;
+	protected $table = 'benificiaries';
 	protected $primaryKey = 'uuid';
 	public $incrementing = false;
-
-	protected $dateFormat = 'Y-m-d\TH:i:s.u';
 
     protected function asDateTime($value)
     {
@@ -64,7 +62,7 @@ class Benificiary extends Model
 
             $createdAt = $this->getCreatedAtColumn();
             $updatedAt = $this->getUpdatedAtColumn();
-            
+
             $query
                 ->select()
                 ->addSelect(DB::raw("$table.$updatedAt  as $updatedAt"))
@@ -88,15 +86,8 @@ class Benificiary extends Model
 		'zone',
 		'location',
 		'district_uuid',
-		'benefit_uuid',
-		'project_area_uuid',
 		'genre_uuid'
 	];
-
-	public function benefit()
-	{
-		return $this->belongsTo(Benefit::class, 'benefit_uuid');
-	}
 
 	public function district()
 	{
@@ -108,8 +99,13 @@ class Benificiary extends Model
 		return $this->belongsTo(Genre::class, 'genre_uuid');
 	}
 
-	public function project_area()
+	public function benefits()
 	{
-		return $this->belongsTo(ProjectArea::class, 'project_area_uuid');
+		return $this->belongsToMany(Benefit::class, 'benificiary_benefit', 'benificiary_uuid', 'benefit_uuid');
+	}
+
+	public function project_areas()
+	{
+		return $this->belongsToMany(ProjectArea::class, 'benificiary_project_area', 'benificiary_uuid', 'project_area_uuid');
 	}
 }
