@@ -91,7 +91,10 @@ class Sync extends Controller
         $deleted = $request->all();
         foreach ($deleted as $ben) {
             try {
-                Benificiary::where('uuid',$ben['uuid'])->get()->first()->delete();
+                $benificiary =   Benificiary::where('uuid',$ben['uuid'])->get()->first();
+                $benificiary->project_areas()->sync([]);
+                $benificiary->benefits()->sync([]);
+                $benificiary->delete();
                } catch (\Throwable $th) {
                     if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
                         array_push($errorOnDeleting,$ben);
