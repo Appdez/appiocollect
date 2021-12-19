@@ -33,7 +33,20 @@ class Sync extends Controller
 
         foreach ($created as $ben) {
             try {
-                 Benificiary::create($ben);
+                 $benificiary = Benificiary::create([
+                    'full_name' => $ben['full_name'] ,
+                    'age'=> $ben['age'],
+                    'qualification'=> $ben['qualification'],
+                    'form_number'=> $ben['form_number'],
+                    'zone'=> $ben['zone'],
+                    'location'=> $ben['location'],
+                    'district_uuid'=> $ben['district_uuid'],
+                    'genre_uuid'=> $ben['genre_uuid']
+                 ]);
+
+                 $benificiary->project_areas()->sync(collect($ben['project_areas'])->pluck('uuid'));
+                 $benificiary->benefits()->sync(collect($ben['benefits'])->pluck('uuid'));
+
                } catch (\Throwable $th) {
                    array_push($errorOnCreating,$ben);
                }
@@ -48,7 +61,21 @@ class Sync extends Controller
 
         foreach ($updated as $ben) {
            try {
-            Benificiary::where('uuid',$ben['uuid'])->get()->first()->update($ben);
+            Benificiary::where('uuid',$ben['uuid'])->get()->first()->update(
+                [
+                    'full_name' => $ben['full_name'] ,
+                    'age'=> $ben['age'],
+                    'qualification'=> $ben['qualification'],
+                    'form_number'=> $ben['form_number'],
+                    'zone'=> $ben['zone'],
+                    'location'=> $ben['location'],
+                    'district_uuid'=> $ben['district_uuid'],
+                    'genre_uuid'=> $ben['genre_uuid']
+                 ]
+            );
+            $benificiary =  Benificiary::where('uuid',$ben['uuid'])->get()->first();
+            $benificiary->project_areas()->sync(collect($ben['project_areas'])->pluck('uuid'));
+            $benificiary->benefits()->sync(collect($ben['benefits'])->pluck('uuid'));
            } catch (\Throwable $th) {
             if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
                 array_push($errorOnDeleting,$ben);
