@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
          Genre::factory(5)->create();
          ProjectArea::factory(5)->create();
          Benificiary::factory(450)->create();*/
-         Benificiary::factory(50)->create();
+        /* Benificiary::factory(50)->create();
 
          Benificiary::all()->map(function(Benificiary $benificary){
              $benificary->project_areas()->sync(ProjectArea::all()->random(
@@ -121,7 +121,7 @@ class DatabaseSeeder extends Seeder
                  collect([1,2,3,4,5,6,7,8])->random(1)->first()
              ));
              return $benificary;
-         });
+         });*/
         //app()[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }
