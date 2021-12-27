@@ -6,12 +6,14 @@
 
 namespace App\Models;
 
-use App\Traits\Uuids;
+
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * Class Benefit
@@ -39,6 +41,6 @@ class Benefit extends Model
 
 	public function benificiaries()
 	{
-		return $this->hasMany(Benificiary::class, 'benefit_uuid');
+		return $this->belongsToMany(Benificiary::class, 'benificiary_benefit', 'benefit_uuid', 'benificiary_uuid');
 	}
 }

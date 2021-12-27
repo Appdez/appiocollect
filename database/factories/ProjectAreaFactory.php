@@ -22,7 +22,6 @@ class ProjectAreaFactory extends Factory
     public function definition(): array
     {
         return [
-            'deleted_at' => $this->faker->dateTime(),
             'name' => $this->faker->name,
             'uuid' => $this->faker->uuid,
         ];

@@ -22,9 +22,8 @@ class DistrictFactory extends Factory
     public function definition(): array
     {
         return [
-            'deleted_at' => $this->faker->dateTime(),
-            'uuid' => $this->faker->uuid(),
-            'name' => $this->faker->name(),
+            'uuid' => $this->faker->uuid,
+            'name' => $this->faker->name,
         ];
     }
 }

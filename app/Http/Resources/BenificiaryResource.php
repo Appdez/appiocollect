@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Traits\ArrayToFormattedString;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class BenificiaryResource extends JsonResource
 {
+    use ArrayToFormattedString;
     /**
      * Transform the resource into an array.
      *
@@ -23,8 +25,8 @@ class BenificiaryResource extends JsonResource
             "Distrito" => $this->district != null ? $this->district->name : "",
             "Bairro" => $this->zone != null ? $this->zone : "",
             "Localidade" => $this->location != null ? $this->location  : "",
-            "Area do projecto" => $this->project_area != null ? $this->project_area->name: "",
-            "Beneficio recebido" => $this->benefit  != null ? $this->benefit->name: "",
+            "Area do projecto" => $this->project_areas->count() > 0 ? $this->convertToString($this->project_areas->pluck('name')): "",
+            "Beneficio recebido" => $this->benefits->count()  > 0 ? $this->convertToString($this->benefits->pluck('name')): "",
            ];
     }
 }

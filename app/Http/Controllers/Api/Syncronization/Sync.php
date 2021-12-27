@@ -15,7 +15,10 @@ class Sync extends Controller
 
     public function ben()
     {
-        $beneficiaries =  Benificiary::all()->unique(function ($item) {
+        $beneficiaries =  Benificiary::with(
+            'project_areas'
+        )->with(
+            'benefits')->get()->unique(function ($item) {
             return $item['full_name'] .
             $item['district_uuid'] .
             $item['project_area_uuid'] .
@@ -40,10 +43,23 @@ class Sync extends Controller
 
         foreach ($created as $ben) {
             try {
-                Benificiary::create($ben);
-            } catch (\Throwable $th) {
-                array_push($errorOnCreating, $ben);
-            }
+                 $benificiary = Benificiary::create([
+                    'full_name' => $ben['full_name'] ,
+                    'age'=> $ben['age'],
+                    'qualification'=> $ben['qualification'],
+                    'form_number'=> $ben['form_number'],
+                    'zone'=> $ben['zone'],
+                    'location'=> $ben['location'],
+                    'district_uuid'=> $ben['district_uuid'],
+                    'genre_uuid'=> $ben['genre_uuid']
+                 ]);
+
+                 $benificiary->project_areas()->sync(collect($ben['project_areas'])->pluck('uuid'));
+                 $benificiary->benefits()->sync(collect($ben['benefits'])->pluck('uuid'));
+
+               } catch (\Throwable $th) {
+                   array_push($errorOnCreating,$ben);
+               }
         }
         return $errorOnCreating;
     }
@@ -54,14 +70,28 @@ class Sync extends Controller
         $updated = $request->all();
 
         foreach ($updated as $ben) {
-            try {
-                Benificiary::where('uuid', $ben['uuid'])->get()->first()->update($ben);
-            } catch (\Throwable $th) {
-                if (Benificiary::where('uuid', $ben['uuid'])->count() > 0) {
-                    array_push($errorOnDeleting, $ben);
-                }
+           try {
+            Benificiary::where('uuid',$ben['uuid'])->get()->first()->update(
+                [
+                    'full_name' => $ben['full_name'] ,
+                    'age'=> $ben['age'],
+                    'qualification'=> $ben['qualification'],
+                    'form_number'=> $ben['form_number'],
+                    'zone'=> $ben['zone'],
+                    'location'=> $ben['location'],
+                    'district_uuid'=> $ben['district_uuid'],
+                    'genre_uuid'=> $ben['genre_uuid']
+                 ]
+            );
+            $benificiary =  Benificiary::where('uuid',$ben['uuid'])->get()->first();
+            $benificiary->project_areas()->sync(collect($ben['project_areas'])->pluck('uuid'));
+            $benificiary->benefits()->sync(collect($ben['benefits'])->pluck('uuid'));
+           } catch (\Throwable $th) {
+            if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
+                array_push($errorOnDeleting,$ben);
             }
         }
+    }
         return $errorOnUpdating;
     }
 
@@ -71,12 +101,16 @@ class Sync extends Controller
         $deleted = $request->all();
         foreach ($deleted as $ben) {
             try {
-                Benificiary::where('uuid', $ben['uuid'])->get()->first()->delete();
-            } catch (\Throwable $th) {
-                if (Benificiary::where('uuid', $ben['uuid'])->count() > 0) {
-                    array_push($errorOnDeleting, $ben);
-                }
-            }
+
+                $benificiary =   Benificiary::where('uuid',$ben['uuid'])->get()->first();
+                $benificiary->project_areas()->sync([]);
+                $benificiary->benefits()->sync([]);
+                $benificiary->delete();
+               } catch (\Throwable $th) {
+                    if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
+                        array_push($errorOnDeleting,$ben);
+                    }
+               }
         }
         return $errorOnDeleting;
     }

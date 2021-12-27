@@ -3,16 +3,16 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Genre;
+use App\Models\BenificiaryProjectArea;
 
-class GenreFactory extends Factory
+class BenificiaryProjectAreaFactory extends Factory
 {
     /**
     * The name of the factory's corresponding model.
     *
     * @var  string
     */
-    protected $model = Genre::class;
+    protected $model = BenificiaryProjectArea::class;
 
     /**
     * Define the model's default state.
@@ -22,8 +22,8 @@ class GenreFactory extends Factory
     public function definition(): array
     {
         return [
-            'uuid' => $this->faker->uuid,
-            'name' => $this->faker->name,
+            'benificiary_uuid' => \App\Models\Benificiary::factory(),
+            'project_area_uuid' => \App\Models\ProjectArea::factory(),
         ];
     }
 }
