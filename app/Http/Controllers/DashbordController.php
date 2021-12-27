@@ -21,7 +21,15 @@ class DashbordController extends Controller
     public function index()
     {
          return view('backend.dashboard')->with([
-                'benifiarios' => Benificiary::all()
+                'benifiarios' => collect(Benificiary::all()->unique(function ($item) {
+                    return $item['full_name'] .
+                    $item['district_uuid'] .
+                    $item['project_area_uuid'] .
+                    $item['age'] .
+                    $item['qualification'] .
+                    $item['zone'] .
+                    $item['location'];
+                })->values()->all())
             ]);
     }
 
@@ -59,12 +67,29 @@ class DashbordController extends Controller
         if (
             $request->hasValidSignature()
         ) {
-            return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()), "Base de dados");
+            return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()->unique(function ($item) {
+                return $item['full_name'] .
+                $item['district_uuid'] .
+                $item['project_area_uuid'] .
+                $item['age'] .
+                $item['qualification'] .
+                $item['zone'] .
+                $item['location'];
+            })->values()->all()), "Base de dados");
+
         } elseif (auth()->check()) {
             if (
                 auth()->user()->hasRole('admin')
             ) {
-                return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()), '');
+                return  $this->importCollection(BenificiaryResource::collection(Benificiary::all()->unique(function ($item) {
+                    return $item['full_name'] .
+                    $item['district_uuid'] .
+                    $item['project_area_uuid'] .
+                    $item['age'] .
+                    $item['qualification'] .
+                    $item['zone'] .
+                    $item['location'];
+                })->values()->all()), '');
             }
         } else {
             return abort(403);

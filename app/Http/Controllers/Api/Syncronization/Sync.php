@@ -9,64 +9,74 @@ use App\Models\District;
 use App\Models\Genre;
 use App\Models\ProjectArea;
 use Illuminate\Http\Request;
+
 class Sync extends Controller
 {
 
     public function ben()
     {
-        $beneficiaries =  Benificiary::all();
-        $benificiaries = $beneficiaries->map(function($ben,$key){
-             $ben->created_at = $ben->created_at->format('Y-m-d H:i:s.u');
-             $ben->updated_at = $ben->updated_at->format('Y-m-d H:i:s.u');
-             return $ben;
+        $beneficiaries =  Benificiary::all()->unique(function ($item) {
+            return $item['full_name'] .
+            $item['district_uuid'] .
+            $item['project_area_uuid'] .
+            $item['age'] .
+            $item['qualification'] .
+            $item['zone'] .
+            $item['location'];
+        })->values()->all();
+        $beneficiaries  = collect($beneficiaries);
+        $benificiaries = $beneficiaries->map(function ($ben, $key) {
+            $ben->created_at = $ben->created_at->format('Y-m-d H:i:s.u');
+            $ben->updated_at = $ben->updated_at->format('Y-m-d H:i:s.u');
+            return $ben;
         });
         return $benificiaries;
     }
 
     public function addCreated(Request  $request)
     {
-        $errorOnCreating = Array();
+        $errorOnCreating = array();
         $created = $request->all();
 
         foreach ($created as $ben) {
             try {
-                 Benificiary::create($ben);
-               } catch (\Throwable $th) {
-                   array_push($errorOnCreating,$ben);
-               }
+                Benificiary::create($ben);
+            } catch (\Throwable $th) {
+                array_push($errorOnCreating, $ben);
+            }
         }
         return $errorOnCreating;
     }
 
     public function updateUpdated(Request  $request)
     {
-        $errorOnUpdating = Array();
+        $errorOnUpdating = array();
         $updated = $request->all();
 
         foreach ($updated as $ben) {
-           try {
-            Benificiary::where('uuid',$ben['uuid'])->get()->first()->update($ben);
-           } catch (\Throwable $th) {
-            if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
-                array_push($errorOnDeleting,$ben);
+            try {
+                Benificiary::where('uuid', $ben['uuid'])->get()->first()->update($ben);
+            } catch (\Throwable $th) {
+                if (Benificiary::where('uuid', $ben['uuid'])->count() > 0) {
+                    array_push($errorOnDeleting, $ben);
+                }
             }
-           }
         }
         return $errorOnUpdating;
     }
 
     public function deleteDeleted(Request $request)
     {
-        $errorOnDeleting = Array();
+        $errorOnDeleting = array();
         $deleted = $request->all();
         foreach ($deleted as $ben) {
             try {
-                Benificiary::where('uuid',$ben['uuid'])->get()->first()->delete();
-               } catch (\Throwable $th) {
-                    if( Benificiary::where('uuid',$ben['uuid'])->count() > 0){
-                        array_push($errorOnDeleting,$ben);
-                    }
-               }
+                Benificiary::where('uuid', $ben['uuid'])->get()->first()->delete();
+            } catch (\Throwable $th) {
+                if (Benificiary::where('uuid', $ben['uuid'])->count() > 0) {
+                    array_push($errorOnDeleting, $ben);
+                }
+            }
         }
         return $errorOnDeleting;
     }
