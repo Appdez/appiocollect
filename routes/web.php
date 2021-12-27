@@ -26,10 +26,9 @@ Route::get('/', function () {
     return  redirect('/dashboard');
 });
 
+Route::get('/relatorio_geral',[DashbordController::class,'all'])->name('relatorio.geral');
 
 Route::middleware(['auth'])->group(function () {
-
-    Route::get('/relatorio_geral',[DashbordController::class,'all'])->name('relatorio.geral');
     Route::get('/dashboard',[DashbordController::class,'index'])->name('dashboard.index');
 });
 
