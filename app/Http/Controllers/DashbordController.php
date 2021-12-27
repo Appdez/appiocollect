@@ -96,4 +96,16 @@ class DashbordController extends Controller
         }
     }
 
+    public function thisMonthForMail()
+    {
+        return $this->importCollection(BenificiaryResource::collection(Benificiary::all()->unique(function ($item) {
+            return $item['full_name'] .
+            $item['district_uuid'] .
+            $item['project_area_uuid'] .
+            $item['age'] .
+            $item['qualification'] .
+            $item['zone'] .
+            $item['location'];
+        })->values()->all()), '', true);
+    }
 }

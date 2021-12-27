@@ -26,7 +26,6 @@ Route::get('/', function () {
     return  redirect('/dashboard');
 });
 
-Route::any('/relatorio/{bairro}',[DashbordController::class,'thisMonth'])->name('relatorio');
 
 Route::middleware(['auth'])->group(function () {
 

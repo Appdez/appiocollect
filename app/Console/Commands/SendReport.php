@@ -45,40 +45,23 @@ class SendReport extends Command
      */
     public function handle()
     {
-        $mails = SendMail::all()->map(function($mail){
-            $mail->details = [
-                'title' => 'Relatório mensal de Base de Dados Biosp',
-                'body' =>
-                [
-                'Bom dia, espero que esteja bem',
-
-                    'Envio em anexo os relatórios de base de dados ' .
-                    'referentes as datas de  ' . date_format(now(), 'd-M-Y') . ' a ' .
-                    date_format(now(), 'd-M-Y')
-
-                ], 'bairros' => $mail->neighborhoods];
-                return $mail;
-        });
+        $mails = SendMail::all();
 
         if ($mails->count() > 0) {
             try {
                 foreach ($mails as $recipient) {
 
                     $paths = array();
-
-                    foreach ($recipient->details['bairros'] as $value) {
-                        $path = $this->controller->thisMonthForMail($value);
-                        if($path != null) array_push($paths,$path);
-                    }
-
-                    Mail::to($recipient->email)->send(new MailEnviarRelatorio($recipient->details,$paths));
+                    $path = $this->controller->thisMonthForMail();
+                    if($path != null) array_push($paths,$path);
+                    Mail::to($recipient->email)->send(new MailEnviarRelatorio($paths));
                 }
-
                 $this->info('Email sent successful.');
                 Storage::deleteDirectory('rl');
                 $this->info('Storage cleaned successful.');
 
             } catch (\Throwable $th) {
+                throw $th;
                 $this->info('Fail with send email');
             }
         }else  $this->info('Fail with send email');
